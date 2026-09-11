@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Newsreader', 'EB Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: #070a12;
+    color: #e2e8f0;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    font-family: var(--font-serif);
+    letter-spacing: -0.015em;
+  }
+}
+
+canvas#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: flex;
+}
+
+/* Font scale classes */
+.fs-sm {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.fs-base {
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.fs-lg {
+  font-size: 1.2rem;
+  line-height: 2;
+}
+
+/* Custom Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+#toast, #mood-toast {
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+
+/* Responsive Non-Gimmick Audio Range Slider */
+input[type="range"].volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 20px;
+}
+
+input[type="range"].volume-slider:focus {
+  outline: none;
+}
+
+/* WebKit Track & Thumb */
+input[type="range"].volume-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #94a3b8 var(--volume-percent, 66.6%), #1e293b var(--volume-percent, 66.6%));
+  transition: background 0.05s linear;
+}
+
+input[type="range"].volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  border: 1.5px solid #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+input[type="range"].volume-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+  background-color: #ffffff;
+}
+
+input[type="range"].volume-slider:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  background-color: #ffffff;
+}
+
+/* Firefox Track & Thumb */
+input[type="range"].volume-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: #1e293b;
+}
+
+input[type="range"].volume-slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 9999px;
+  background: #94a3b8;
+}
+
+input[type="range"].volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  border: 1.5px solid #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease;
+}
+
+
+

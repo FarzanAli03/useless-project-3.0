@@ -1,0 +1,6 @@
+{
+  "name": "Sleep.exe",
+  "description": "Academic Boredom Generator turning complex study material into monotonous, sleep-inducing explanations framed by Van Gogh's Starry Night and a soothing night sky.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep.exe - Academic Boredom Generator</title>
+    <meta name="description" content="Academic Boredom Generator turning complex study material into monotonous, sleep-inducing explanations framed by Van Gogh's Starry Night and a soothing night sky." />
+    <meta property="og:title" content="Sleep.exe - Academic Boredom Generator" />
+    <meta property="og:description" content="Academic Boredom Generator turning complex study material into monotonous, sleep-inducing explanations framed by Van Gogh's Starry Night and a soothing night sky." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-[#070a12] text-[#e2e8f0] antialiased overflow-x-hidden selection:bg-slate-700 selection:text-white min-h-screen flex flex-col justify-between">
+    
+    <!-- Background Dynamic Canvas (Page 1: Van Gogh Starry Night Swirls; Page 2+: Good Night Sky) -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header -->
+    <header id="main-header" class="relative z-20 border-b border-slate-800/80 bg-[#070a12]/80 backdrop-blur-md px-4 py-3 sm:px-6 transition-all duration-300">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        
+        <!-- Scholastic Emblem Logo -->
+        <div id="header-logo" class="flex items-center gap-3 cursor-pointer group select-none">
+          <div class="relative w-9 h-9 rounded-lg overflow-hidden border border-slate-700/80 bg-slate-950 shadow-sm group-hover:border-slate-500 transition-all flex-shrink-0">
+            <img
+              id="app-logo-img"
+              src="/assets/logo.jpg"
+              alt="Sleep.exe Crest"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="eager"
+            />
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-serif text-lg tracking-normal text-slate-100 font-medium">Sleep.exe</span>
+            </div>
+            <p class="text-[11px] text-slate-400 tracking-normal hidden sm:block">Academic Boredom Generator</p>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <!-- Set Mood Button (Sleepy Lofi Music Engine) -->
+          <button
+            id="btn-set-mood"
+            type="button"
+            class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-700/80 bg-slate-900/80 text-slate-200 hover:text-white hover:border-slate-600 hover:bg-slate-800 transition-all cursor-pointer shadow-sm"
+            title="Toggle sleepy lofi ambient study music"
+          >
+            <span id="set-mood-icon" class="flex items-center">
+              <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+            </span>
+            <span id="set-mood-label">Set Mood</span>
+          </button>
+
+          <!-- Clean Responsive Sound Volume Controller -->
+          <div
+            id="volume-control-group"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs text-slate-300 shadow-sm"
+            title="Volume Control"
+          >
+            <!-- Mute Toggle -->
+            <button
+              id="btn-volume-mute"
+              type="button"
+              class="text-slate-400 hover:text-slate-200 transition-colors cursor-pointer flex items-center p-0.5 rounded"
+              title="Mute / Unmute"
+              aria-label="Mute or unmute audio"
+            >
+              <svg id="volume-icon" class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+            </button>
+
+            <!-- Responsive Smooth Audio Range Slider -->
+            <div class="flex items-center w-16 sm:w-20">
+              <input
+                id="volume-slider"
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                step="1"
+                class="volume-slider w-full"
+                aria-label="Adjust volume"
+                style="--volume-percent: 100%;"
+              />
+            </div>
+
+            <!-- Volume Numeric Readout -->
+            <span id="volume-label" class="text-[11px] text-slate-300 font-medium min-w-[32px] text-right select-none">100%</span>
+          </div>
+
+          <!-- Start Over Button (hidden on landing) -->
+          <button
+            id="btn-start-over"
+            type="button"
+            class="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-700/80 bg-slate-900/60 text-slate-300 hover:text-white hover:border-slate-600 transition-all cursor-pointer"
+            title="Restart and enter new academic material"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span class="hidden sm:inline">Start Over</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Floating Mood Toast -->
+    <div
+      id="mood-toast"
+      class="fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-lg bg-slate-900/95 border border-slate-700 text-slate-200 text-xs font-medium backdrop-blur-md shadow-lg flex items-center gap-2.5 pointer-events-none opacity-0 -translate-y-2 transition-all duration-300"
+    >
+      <span class="text-sm">🎵</span>
+      <span>Playing Sleepy Lofi (Vinyl • 68 BPM)</span>
+    </div>
+
+    <!-- Main Views Container -->
+    <main class="relative z-10 max-w-5xl w-full mx-auto px-4 py-6 flex-1 flex flex-col justify-center items-center">
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: LANDING PAGE WITH VAN GOGH STARRY NIGHT -->
+      <!-- ========================================== -->
+      <section id="view-landing" class="view-section active flex-col items-center text-center max-w-2xl mx-auto w-full py-4 animate-fade-in">
+        
+        <!-- Restful Scholastic Tag -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-slate-400 text-xs mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>An archival experiment in sleep induction through scholastic inertia</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif text-slate-100 tracking-tight mb-3">
+          Sleep.exe
+        </h1>
+
+        <!-- Subtitle & Quote -->
+        <p class="text-sm sm:text-base text-slate-400 max-w-md mx-auto mb-6 leading-relaxed font-light">
+          "Because sometimes the best way to understand a topic is to stop understanding it."
+        </p>
+
+        <!-- Real Starry Night of Van Gogh Exhibition Card -->
+        <div class="w-full max-w-md mx-auto mb-8">
+          <div class="group relative rounded-xl overflow-hidden border border-slate-800/90 bg-slate-900/80 p-2.5 shadow-xl transition-all duration-300 hover:border-slate-600">
+            <!-- Painting Frame -->
+            <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-slate-950">
+              <img
+                id="vangogh-img"
+                src="/assets/starry_night.jpg"
+                alt="The Starry Night by Vincent van Gogh (1889)"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="eager"
+              />
+
+              <!-- Atmospheric Vignette -->
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
+
+              <!-- Top Left Badge -->
+              <div class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded bg-black/70 backdrop-blur-sm border border-slate-700/80 text-slate-300 text-[11px] font-medium flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                <span>The Starry Night (1889)</span>
+              </div>
+
+              <!-- Interactive Examine Button Hover Overlay -->
+              <div class="absolute inset-0 bg-slate-950/50 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                <button
+                  id="btn-examine-vangogh"
+                  type="button"
+                  class="px-4 py-2 rounded-lg bg-slate-900/95 border border-slate-600 text-slate-200 text-xs font-medium shadow-md flex items-center gap-2 hover:bg-slate-800 transition-all cursor-pointer transform translate-y-2 group-hover:translate-y-0 duration-200"
+                >
+                  <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                    <path d="M11 8v6"></path>
+                    <path d="M8 11h6"></path>
+                  </svg>
+                  <span>Examine Canvas Details</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Caption -->
+            <div class="pt-2.5 pb-1 px-2 flex items-center justify-between text-left">
+              <div>
+                <p class="text-xs font-serif text-slate-200">The Starry Night (1889)</p>
+                <p class="text-[11px] text-slate-400">Vincent van Gogh • MoMA, New York</p>
+              </div>
+              <span class="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/80 px-2 py-0.5 rounded">
+                Oil on Canvas
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm">
+          <button
+            id="btn-start-generator"
+            type="button"
+            class="w-full sm:w-auto px-7 py-3 rounded-lg bg-slate-100 hover:bg-white text-slate-950 font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg active:scale-[0.98]"
+          >
+            <span>Put Me To Sleep</span>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+
+          <button
+            id="btn-open-pill-modal"
+            type="button"
+            class="w-full sm:w-auto px-5 py-3 rounded-lg bg-slate-900/90 border border-slate-700/80 text-slate-300 hover:text-white hover:border-slate-600 hover:bg-slate-800 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path>
+              <path d="m8.5 8.5 7 7"></path>
+            </svg>
+            <span>Take Sleep Pill</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: ACADEMIC INPUT FORM (GOOD NIGHT SKY ACTIVE) -->
+      <!-- ========================================== -->
+      <section id="view-input" class="view-section flex-col items-center max-w-xl mx-auto w-full py-2 animate-fade-in">
+        <!-- Back Navigation -->
+        <div class="w-full flex items-center justify-between mb-4">
+          <button
+            id="btn-back-landing"
+            type="button"
+            class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+            <span>Back to Starry Night</span>
+          </button>
+        </div>
+
+        <!-- Form Card -->
+        <div class="w-full rounded-xl border border-slate-800/90 bg-slate-950/80 backdrop-blur-xl p-6 sm:p-7 shadow-xl">
+          <!-- Card Header -->
+          <div class="mb-5">
+            <h2 class="text-2xl font-serif text-slate-100 mb-1">Academic Neutralizer</h2>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              Tell us what you are studying. We will extract all emotional resonance, curiosity, and narrative momentum from it.
+            </p>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="mb-5">
+            <label class="block text-xs text-slate-400 mb-2">
+              Academic Archetypes
+            </label>
+            <div class="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                data-preset="cse"
+                class="btn-preset text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white transition-colors cursor-pointer"
+              >
+                💻 BTech CSE
+              </button>
+              <button
+                type="button"
+                data-preset="mbbs"
+                class="btn-preset text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white transition-colors cursor-pointer"
+              >
+                🩺 MBBS Medicine
+              </button>
+              <button
+                type="button"
+                data-preset="law"
+                class="btn-preset text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white transition-colors cursor-pointer"
+              >
+                ⚖️ Law LLB
+              </button>
+              <button
+                type="button"
+                data-preset="mba"
+                class="btn-preset text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white transition-colors cursor-pointer"
+              >
+                📈 MBA Finance
+              </button>
+              <button
+                type="button"
+                data-preset="physics"
+                class="btn-preset text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white transition-colors cursor-pointer"
+              >
+                ⚛️ Physics
+              </button>
+            </div>
+          </div>
+
+          <!-- Input Fields -->
+          <form id="academic-form" class="space-y-4">
+            <div>
+              <label for="input-degree" class="block text-xs font-medium text-slate-300 mb-1.5">
+                Class / Degree Program
+              </label>
+              <input
+                id="input-degree"
+                type="text"
+                required
+                placeholder="e.g., 3rd Year B.Tech Computer Science"
+                value="3rd Year B.Tech Computer Science"
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-900/90 border border-slate-800 focus:border-slate-500 focus:outline-none text-slate-200 text-sm font-sans transition-colors placeholder:text-slate-600"
+              />
+            </div>
+
+            <div>
+              <label for="input-subject" class="block text-xs font-medium text-slate-300 mb-1.5">
+                Subject Name
+              </label>
+              <input
+                id="input-subject"
+                type="text"
+                required
+                placeholder="e.g., Theory of Computation & Formal Languages"
+                value="Theory of Computation & Formal Languages"
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-900/90 border border-slate-800 focus:border-slate-500 focus:outline-none text-slate-200 text-sm font-sans transition-colors placeholder:text-slate-600"
+              />
+            </div>
+
+            <div>
+              <label for="input-topic" class="block text-xs font-medium text-slate-300 mb-1.5">
+                Topic You Hate Most <span class="text-slate-500 font-normal">(Optional)</span>
+              </label>
+              <input
+                id="input-topic"
+                type="text"
+                placeholder="e.g., Pumping Lemma for Context-Free Languages (or leave blank)"
+                value=""
+                class="w-full px-3.5 py-2.5 rounded-lg bg-slate-900/90 border border-slate-800 focus:border-slate-500 focus:outline-none text-slate-200 text-sm font-sans transition-colors placeholder:text-slate-600"
+              />
+            </div>
+
+            <button
+              id="btn-submit-academic"
+              type="submit"
+              class="w-full mt-6 py-3 px-4 rounded-lg bg-slate-100 hover:bg-white text-slate-950 font-medium text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+            >
+              <span>Put me to sleep</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: LOADING / MONOTONY COMPILATION -->
+      <!-- ========================================== -->
+      <section id="view-loading" class="view-section flex-col items-center justify-center py-12 max-w-md mx-auto text-center w-full animate-fade-in">
+        <!-- Moon Orbit Animation -->
+        <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full border border-slate-700/40 animate-spin" style="animation-duration: 9s;"></div>
+          <div class="absolute inset-2 rounded-full border border-slate-600/50 border-dashed animate-spin" style="animation-duration: 6s; animation-direction: reverse;"></div>
+          <div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-300 shadow-md">
+            <svg class="w-5 h-5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="text-xl font-serif text-slate-100 mb-2">Synthesizing Bureaucracy...</h3>
+        <p id="loading-status-text" class="text-xs text-slate-400 mb-6 h-4">
+          Stripping curiosity and narrative momentum...
+        </p>
+
+        <!-- Progress Bar -->
+        <div class="w-64 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+          <div id="loading-progress-bar" class="h-full bg-slate-300 w-0 transition-all duration-300"></div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: MONOTONOUS ACADEMIC OUTPUT (READING VIEW) -->
+      <!-- ========================================== -->
+      <section id="view-result" class="view-section flex-col items-center max-w-3xl mx-auto w-full py-2 animate-fade-in">
+
+        <!-- Reading Box Container -->
+        <div id="result-box-container" class="w-full rounded-xl border border-slate-800/90 bg-[#0a0e17]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl transition-all duration-300">
+          <!-- Reading Box Header Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-800/80">
+            <div>
+              <h2 id="result-title" class="text-xl sm:text-2xl font-serif text-slate-100">
+                Monotonous Academic Treatise
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">
+                Dryness Index: <span id="dryness-level-text" class="text-slate-200 font-medium">Standard (100%)</span>
+              </p>
+            </div>
+
+            <!-- Font Size & View Controls -->
+            <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1 rounded-lg">
+              <button
+                id="btn-fs-sm"
+                type="button"
+                class="px-2 py-0.5 rounded text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                title="Small text"
+              >
+                A-
+              </button>
+              <button
+                id="btn-fs-base"
+                type="button"
+                class="px-2 py-0.5 rounded text-xs bg-slate-800 text-slate-100 font-medium transition-colors cursor-pointer"
+                title="Normal text"
+              >
+                A
+              </button>
+              <button
+                id="btn-fs-lg"
+                type="button"
+                class="px-2 py-0.5 rounded text-xs text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                title="Large text"
+              >
+                A+
+              </button>
+
+              <div class="w-px h-3 bg-slate-800 mx-1"></div>
+
+              <!-- Copy Button -->
+              <button
+                id="btn-copy-text"
+                type="button"
+                class="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                title="Copy boring text"
+              >
+                <svg id="copy-icon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                </svg>
+              </button>
+
+              <!-- Distraction-Free Mode Toggle -->
+              <button
+                id="btn-distraction-free"
+                type="button"
+                class="p-1 rounded text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                title="Toggle distraction-free reading mode"
+              >
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Academic Content Paragraphs (Scholarly Newsreader Font) -->
+          <div id="result-content-body" class="space-y-4 text-slate-300 font-serif leading-relaxed fs-base max-w-none">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Action Footer Controls -->
+        <div id="result-actions-bar" class="w-full flex flex-wrap items-center justify-between gap-3 mt-5">
+          <!-- Make It Drier Button (Limited to 5 Uses) -->
+          <button
+            id="btn-make-drier"
+            type="button"
+            class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-sm"
+            title="Increase academic monotony (Limit: 5 uses)"
+          >
+            <span id="btn-make-drier-text">🥱 Make It Drier</span>
+            <span id="drier-count-tag" class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400 border border-slate-700 font-medium">
+              0/5
+            </span>
+          </button>
+
+          <div class="flex items-center gap-2.5">
+            <!-- Sleep Pill CTA -->
+            <button
+              id="btn-result-pill"
+              type="button"
+              class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-xs transition-all duration-200 flex items-center gap-1.5 cursor-pointer"
+            >
+              <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path>
+                <path d="m8.5 8.5 7 7"></path>
+              </svg>
+              <span>Sleep Pill</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 5: MAXIMUM SLEEP MODE -->
+      <!-- ========================================== -->
+      <section id="view-sleep-mode" class="view-section flex-col items-center justify-center text-center max-w-lg mx-auto w-full py-10 animate-fade-in">
+        <!-- Crescent Moon Disc -->
+        <div class="w-20 h-20 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 shadow-xl mb-6">
+          <svg class="w-10 h-10 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-serif text-slate-200 mb-3 tracking-normal">
+          Maximum Sleep Mode
+        </h2>
+
+        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6 max-w-sm font-light">
+          All cognitive stimulations have been neutralized. Close your eyes and allow the repetitive scholastic syntax to dissolve remaining consciousness.
+        </p>
+
+        <!-- Monotonous Drone Repeater -->
+        <div class="w-full p-4 rounded-lg bg-slate-950/80 border border-slate-900 text-xs text-slate-500 text-left space-y-2 mb-8 select-none pointer-events-none opacity-60">
+          <p>• subsection 4.2: reiteration of previously acknowledged lemma stipulations...</p>
+          <p>• null-operation cycle 84: no state transformation detected...</p>
+          <p>• breath frequency stabilizing to rhythmic delta wave cadence...</p>
+        </div>
+
+        <button
+          id="btn-exit-sleep-mode"
+          type="button"
+          class="px-5 py-2.5 rounded-lg border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700 text-xs transition-colors cursor-pointer"
+        >
+          Exit Maximum Sleep Mode
+        </button>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-800/80 py-3 text-center text-xs text-slate-500">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p>Sleep.exe • Monotonous Academic Neutralization</p>
+        <p class="text-[11px] text-slate-600">Designed to be boring • Built with HTML, CSS, & JS</p>
+      </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: VAN GOGH STARRY NIGHT DETAIL MODAL -->
+    <!-- ========================================== -->
+    <div id="modal-vangogh" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
+      <div class="w-full max-w-2xl rounded-xl border border-slate-800 bg-slate-950 p-5 shadow-2xl relative animate-fade-in">
+        <!-- Close Button -->
+        <button
+          id="btn-close-modal-vangogh"
+          type="button"
+          class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+
+        <h3 class="text-xl font-serif text-slate-100 mb-1">Vincent van Gogh — The Starry Night (1889)</h3>
+        <p class="text-xs text-slate-400 mb-4">Museum of Modern Art (MoMA), New York City</p>
+
+        <!-- High-Res Display Frame -->
+        <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-slate-900 border border-slate-800 mb-4">
+          <img
+            src="/assets/starry_night.jpg"
+            alt="The Starry Night full view"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed font-light mb-2">
+          Painted in June 1889 from the east-facing window of Van Gogh's asylum room at Saint-Rémy-de-Provence, just before sunrise, with the addition of an idealized village. The swirling sky, luminous morning star, radiant crescent moon, and cypress silhouette embody the tranquil, contemplative nocturnal wonder that frames Sleep.exe.
+        </p>
+
+        <div class="flex justify-end mt-4">
+          <button
+            id="btn-dismiss-modal-vangogh"
+            type="button"
+            class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium transition-colors cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: SLEEP PILL CONFIRMATION -->
+    <!-- ========================================== -->
+    <div id="modal-pill" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4">
+      <div class="w-full max-w-md rounded-xl border border-slate-800 bg-slate-950 p-6 shadow-2xl relative animate-fade-in text-center">
+        <!-- Close Button -->
+        <button
+          id="btn-close-modal-pill"
+          type="button"
+          class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+
+        <div class="w-12 h-12 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path>
+            <path d="m8.5 8.5 7 7"></path>
+          </svg>
+        </div>
+
+        <h3 class="text-xl font-serif text-slate-100 mb-2">Maximum Monotony Dose</h3>
+        <p class="text-xs text-slate-400 leading-relaxed font-light mb-6">
+          Taking the Academic Sleep Pill initiates an ultra-dim, sensory-deprived reading state designed to extinguish remaining wakefulness through pure scholastic inertia.
+        </p>
+
+        <div class="flex items-center justify-center gap-3">
+          <button
+            id="btn-cancel-modal-pill"
+            type="button"
+            class="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-slate-200 text-xs transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            id="btn-confirm-modal-pill"
+            type="button"
+            class="px-5 py-2 rounded-lg bg-slate-100 hover:bg-white text-slate-950 font-medium text-xs transition-colors shadow-sm cursor-pointer"
+          >
+            Ingest Pill (Enter Sleep Mode)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- General Humorous Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-lg bg-slate-900/95 border border-slate-800 text-slate-200 text-xs shadow-xl backdrop-blur-md opacity-0 translate-y-4 pointer-events-none transition-all duration-300"
+    >
+      <span id="toast-message">Notification message</span>
+    </div>
+
+    <!-- Vanilla JS Application Entry Point -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
