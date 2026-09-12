@@ -444,7 +444,7 @@ Each escalation adds approximately 40% more words and 60% more tedium.
 
 dashboard:
 
-https://drive.google.com/file/d/1vTKGJqAiNkT-\_04CHGi2livzZubHfLJw/view?usp=drivesdk
+https://drive.google.com/file/d/1vTKGJqAiNkT-_04CHGi2livzZubHfLJw/view?usp=drivesdk
 
 
 
@@ -454,7 +454,7 @@ https://drive.google.com/file/d/1UsBW4W3ba-lvy3yc9laUgPuB6x9FpuYl/view?usp=drive
 
 output/description page:
 
-https://drive.google.com/file/d/1\_Ubqyq60UvD8S9BJ0BTWgJiQGXUIgFzc/view?usp=drivesdk
+https://drive.google.com/file/d/1_Ubqyq60UvD8S9BJ0BTWgJiQGXUIgFzc/view?usp=drivesdk
 
 
 
@@ -468,8 +468,7 @@ https://drive.google.com/file/d/1\_Ubqyq60UvD8S9BJ0BTWgJiQGXUIgFzc/view?usp=driv
 
 video demo:
 
-https://drive.google.com/file/d/1XpPLMjf8bPn\_PxReoxaKCC4TIdJTWhYE/view?usp=drivesdk
-
+https://drive.google.com/file/d/1XpPLMjf8bPn_PxReoxaKCC4TIdJTWhYE/view?usp=drivesdk
 
 
 \---
